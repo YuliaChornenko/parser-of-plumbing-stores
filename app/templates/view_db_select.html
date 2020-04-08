@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/index">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Выбрать базу данных</li>
+      </ol>
+    </nav>
+    <div>
+        <form action="/sandi_db" method="post">
+            <button class="btn btn-primary btn-lg btn-block">SANDI_B2B</button>
+        </form>
+        <hr>
+        <form action="/update_db_select" method="post">
+            <button class="btn btn-primary btn-lg btn-block">ANTEY_B2B</button>
+        </form>
+        <hr>
+        <form action="/update_db_select" method="post">
+            <button class="btn btn-primary btn-lg btn-block">ARGOMAT_B2B</button>
+        </form>
+    </div>
+{% endblock %}

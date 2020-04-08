@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/index">Главная</a></li>
+          <li class="breadcrumb-item"><a href="/view_db_select">Выбрать базу данных</a></li>
+          <li class="breadcrumb-item active" aria-current="page">SANDI</li>
+      </ol>
+    </nav>
+   <div>
+       {% for post in posts %}
+       <div><p>{{ post }}</p></div>
+       {% endfor %}
+   </div>
+{% endblock %}
