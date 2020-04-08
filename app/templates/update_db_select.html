@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/index">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Выбрать действие</li>
+      </ol>
+    </nav>
+    <div>
+        <form action="/update_db_all" method="post">
+            <button class="btn btn-primary btn-lg btn-block">Обновить все</button>
+        </form>
+        <hr>
+        <form action="/update_db_price" method="post">
+            <button class="btn btn-primary btn-lg btn-block">Обновить цену и наличие</button>
+        </form>
+        <hr>
+        <form action="/update_db_category" method="post">
+            <button class="btn btn-primary btn-lg btn-block">Обновить по отдельным категориям</button>
+        </form>
+    </div>
+{% endblock %}

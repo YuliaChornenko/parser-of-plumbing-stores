@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/index">Главная</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Обновить базу данных</li>
+  </ol>
+</nav>
+<div class="container">
+
+    <h3>Введите сайт и нажмите ENTER:</h3>
+    <form method="post">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <input class="btn btn-outline-secondary" type="submit" id="button-addon1"/>
+            </div>
+            <input name="site" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="button-addon1">
+        </div>
+    </form>
+</div>
+
+{% endblock %}
