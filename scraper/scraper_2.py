@@ -2,7 +2,6 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 
-
 def agromat_scraper(agromat_link):
     with urlopen(agromat_link) as r:
         xml = r.read().decode('utf-8')

@@ -4,6 +4,7 @@ from app.db.get_db import read
 from update_function.sandi_update import SandiUpdate
 from app.db.get_db import db
 
+
 @app.route('/')
 @app.route('/index')
 def index():

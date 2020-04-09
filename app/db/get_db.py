@@ -4,9 +4,11 @@ import pandas as pd
 import numpy as np
 client = MongoClient()
 
+
 client = MongoClient('mongodb://romasoya1402:Roma1989Soya@cluster0-shard-00-00-zkewx.mongodb.net:27017,cluster0-shard-00-01-zkewx.mongodb.net:27017,cluster0-shard-00-02-zkewx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority ')
 
 db = client.b2b
+
 #sandi_table= db['sandi_db'].find()
 #sandi_table= db['sandi_db'].find()
 # docs = pd.DataFrame(columns=[])

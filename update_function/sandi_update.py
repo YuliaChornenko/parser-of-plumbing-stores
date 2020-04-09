@@ -1,5 +1,5 @@
 from scraper.scraper_1 import Scraper
-
+# from app.db.get_db import
 
 class SandiUpdate(Scraper):
 
