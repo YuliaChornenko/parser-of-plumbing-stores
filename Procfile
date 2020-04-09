@@ -1,1 +1,1 @@
-web: gunicorn run:app --log-level=debug --timeout=10000
+web: gunicorn run:app --timeout 1200
