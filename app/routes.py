@@ -2,7 +2,10 @@ from flask import render_template, Response, request, redirect, url_for
 from app import app
 from app.db.get_db import read
 from update_function.sandi_update import SandiUpdate
-from app.db.get_db import db
+from update_function.antey_update import AnteyUpdate
+from update_function.agromat_update import AgromatUpdate
+from app.db.get_db import db, prepare_csv
+import re
 
 @app.route('/')
 @app.route('/index')
@@ -63,8 +66,19 @@ def update_db_select():
 def update_db_all():
     site = request.args.get('site')
     print(site)
-    #SandiUpdate.sandi_update_all(db, site)
-    return SandiUpdate.sandi_update_all(db, site)
+    print(site.split('/'))
+    if site.split('/')[2] == 'b2b-sandi.com.ua':
+        SandiUpdate.sandi_update_all(db, site)
+        prepare_csv('sandi_db')
+    elif site.split('/')[2] == 'b2b.antey.com.ua':
+        AnteyUpdate.antey_update_all(db, site)
+        prepare_csv('antey_db')
+    elif site.split('/')[2] == 'partners.agromat.ua':
+        AgromatUpdate.agromat_update_all(db, site)
+        prepare_csv('agromat_db')
+    else:
+        return 'Проверьте корректность ссылки!'
+    return 'База данных обновлена!'
 
 @app.route('/update_db_price', methods=['GET', 'POST'])
 def update_db_price():
