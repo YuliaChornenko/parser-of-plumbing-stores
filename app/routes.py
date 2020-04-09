@@ -37,7 +37,7 @@ def agromat_db():
 
 @app.route('/update_db', methods=['GET', 'POST'])
 def update_db():
-    site = request.form.get('site').strip()
+    site = request.form.get('site')
     print(site)
     if site:
         return redirect(url_for('update_db_select', site=site))
@@ -45,12 +45,12 @@ def update_db():
 
 @app.route('/update_db_select', methods=['GET', 'POST'])
 def update_db_select():
-    site = request.args.get('site')
+    site = request.args.get('site').strip()
     return render_template('update_db_select.html', site=site)
 
 @app.route('/update_db_all', methods=['GET', 'POST'])
 def update_db_all():
-    site = request.args.get('site')
+    site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
         SandiUpdate.sandi_update_all(db, site)
         prepare_csv('sandi_db')
@@ -66,7 +66,7 @@ def update_db_all():
 
 @app.route('/update_db_price', methods=['GET', 'POST'])
 def update_db_price():
-    site = request.args.get('site')
+    site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
         SandiUpdate.sandi_update_prices(db, site)
         prepare_csv('sandi_db')
@@ -82,7 +82,7 @@ def update_db_price():
 
 @app.route('/update_db_brand_select', methods=['GET', 'POST'])
 def update_db_brand_select():
-    site = request.args.get('site')
+    site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
         posts = Scraper.get_sandi_brands(Scraper.get_soup(site))
     elif site.split('/')[2] == 'b2b.antey.com.ua':
