@@ -10,7 +10,10 @@ cluster = MongoClient("mongodb://romasoya1402:Roma1989Soya@cluster0-shard-00-00-
 db = cluster['b2b']
 
 # полностью обновляют
-# SandiUpdate.sandi_update_all(db, sandi_link)
+SandiUpdate.sandi_update_all(db, sandi_link)
 # AnteyUpdate.antey_update_all(db, antey_link)
 # AgromatUpdate.agromat_update_all(db, agromat_link)
 
+# обновляют цену, наличие
+# SandiUpdate.sandi_update_prices(db, sandi_link)
+# AnteyUpdate.antey_update_prices(db, antey_link)

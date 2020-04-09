@@ -1,3 +1,0 @@
-[40966:71943:0408/005929.820987:WARNING:notification_platform_bridge_mac.mm(534)] AlertNotificationService: XPC connection interrupted.
-[40966:775:0408/010015.120990:WARNING:pref_notifier_impl.cc(40)] Pref observer for media_router.cast_allow_all_ips found at shutdown.
-[40966:775:0408/010015.121262:WARNING:pref_notifier_impl.cc(40)] Pref observer for browser.relaunch_notification_period found at shutdown.

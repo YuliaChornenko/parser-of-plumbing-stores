@@ -7,3 +7,7 @@ class AgromatUpdate:
          agromat_collection.delete_many({})
          agromat_dataset_list = agromat_scraper(agromat_link)
          agromat_collection.insert_many(agromat_dataset_list)
+
+     def agromat_update_prices(db, agromat_link):
+         agromat_collection = db['agromat_db']
+         
