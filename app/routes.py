@@ -8,7 +8,7 @@ from app.db.get_db import db, prepare_csv
 from scraper.scraper_1 import Scraper
 from scraper.scraper_2 import get_agromat_brands
 import os
-
+import pandas as pd
 
 
 @app.route('/')
@@ -22,46 +22,26 @@ def view_db_select():
 
 @app.route('/sandi_db', methods=['GET', 'POST'])
 def sandi_db():
-    # file='sandi.csv'
-    # df = read(file)
-    # list_final = list()
-    # for lis in df:
-    #     list_temp = list()
-    #     for cat in lis:
-    #         list_temp.append(cat+' : '+lis[cat][0])
-    #     list_final.append(list_temp)
-    # return render_template('db_view.html', posts_even=list_final[::2], posts_odd = list_final[1::2])
     path = "db/data/sandi_db.xlsx"
     return send_file(path, as_attachment=True)
 
 @app.route('/antey_db', methods=['GET', 'POST'])
 def antey_db():
-    file='antey.csv'
-    df = read(file)
-    list_final = list()
-    for lis in df:
-        for cat in lis:
-            list_final.append(cat+' : '+lis[cat][0])
-    return render_template('db_view.html', posts=list_final)
+    path = "db/data/antey_db.xlsx"
+    return send_file(path, as_attachment=True)
 
 @app.route('/agromat_db', methods=['GET', 'POST'])
 def agromat_db():
-    file='agromat.csv'
-    df = read(file)
-    list_final = list()
-    for lis in df:
-        for cat in lis:
-            list_final.append(cat+' : '+lis[cat][0])
-    return render_template('db_view.html', posts=list_final)
+    path = "db/data/agromat_db.xlsx"
+    return send_file(path, as_attachment=True)
 
 @app.route('/update_db', methods=['GET', 'POST'])
 def update_db():
-    site = request.form.get('site')
+    site = request.form.get('site').strip()
     print(site)
     if site:
         return redirect(url_for('update_db_select', site=site))
     return render_template('update_db.html', site=site)
-
 
 @app.route('/update_db_select', methods=['GET', 'POST'])
 def update_db_select():
