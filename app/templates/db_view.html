@@ -9,8 +9,31 @@
       </ol>
     </nav>
    <div>
-       {% for post in posts %}
-       <div><p>{{ post }}</p></div>
-       {% endfor %}
+       <div class="row">
+           {% for post in posts_even %}
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Специальный заголовок</h5>
+                  {% for line in post %}
+                    <p class="card-text">{{ line }}</p>
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+           {% endfor %}
+           {% for post in posts_odd %}
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Специальный заголовок</h5>
+                  {% for line in post %}
+                <p class="card-text">{{ line }}</p>
+                  {% endfor %}
+              </div>
+            </div>
+          </div>
+           {% endfor %}
+        </div>
    </div>
 {% endblock %}

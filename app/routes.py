@@ -14,9 +14,35 @@ def view_db_select():
 
 @app.route('/sandi_db', methods=['GET', 'POST'])
 def sandi_db():
-    df = read()
-    return render_template('db_view.html', posts=df)
+    file='work.csv'
+    df = read(file)
+    list_final = list()
+    for lis in df:
+        list_temp = list()
+        for cat in lis:
+            list_temp.append(cat+' : '+lis[cat][0])
+        list_final.append(list_temp)
+    return render_template('db_view.html', posts_even=list_final[::2], posts_odd = list_final[1::2])
 
+@app.route('/antey_db', methods=['GET', 'POST'])
+def antey_db():
+    file='antey.csv'
+    df = read(file)
+    list_final = list()
+    for lis in df:
+        for cat in lis:
+            list_final.append(cat+' : '+lis[cat][0])
+    return render_template('db_view.html', posts=list_final)
+
+@app.route('/agromat_db', methods=['GET', 'POST'])
+def agromat_db():
+    file='agromat.csv'
+    df = read(file)
+    list_final = list()
+    for lis in df:
+        for cat in lis:
+            list_final.append(cat+' : '+lis[cat][0])
+    return render_template('db_view.html', posts=list_final)
 
 @app.route('/update_db', methods=['GET', 'POST'])
 def update_db():
