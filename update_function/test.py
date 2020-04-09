@@ -14,3 +14,7 @@ db = cluster['b2b']
 # AnteyUpdate.antey_update_all(db, antey_link)
 # AgromatUpdate.agromat_update_all(db, agromat_link)
 
+# обновляют цену, наличие
+# SandiUpdate.sandi_update_prices(db, sandi_link)
+# AnteyUpdate.antey_update_prices(db, antey_link)
+AgromatUpdate.agromat_update_prices(db, agromat_link)

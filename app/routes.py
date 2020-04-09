@@ -7,6 +7,7 @@ from update_function.agromat_update import AgromatUpdate
 from app.db.get_db import db, prepare_csv
 import re
 
+
 @app.route('/')
 @app.route('/index')
 def index():
