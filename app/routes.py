@@ -1,7 +1,8 @@
 from flask import render_template, Response, request, redirect, url_for
 from app import app
 from app.db.get_db import read
-
+from update_function.sandi_update import SandiUpdate
+from app.db.get_db import db
 
 @app.route('/')
 @app.route('/index')
@@ -14,7 +15,7 @@ def view_db_select():
 
 @app.route('/sandi_db', methods=['GET', 'POST'])
 def sandi_db():
-    file='work.csv'
+    file='sandi.csv'
     df = read(file)
     list_final = list()
     for lis in df:
@@ -55,11 +56,15 @@ def update_db():
 
 @app.route('/update_db_select', methods=['GET', 'POST'])
 def update_db_select():
-    return render_template('update_db_select.html')
+    site = request.args.get('site')
+    return render_template('update_db_select.html', site=site)
 
 @app.route('/update_db_all', methods=['GET', 'POST'])
 def update_db_all():
-    return 'all'
+    site = request.args.get('site')
+    print(site)
+    #SandiUpdate.sandi_update_all(db, site)
+    return SandiUpdate.sandi_update_all(db, site)
 
 @app.route('/update_db_price', methods=['GET', 'POST'])
 def update_db_price():

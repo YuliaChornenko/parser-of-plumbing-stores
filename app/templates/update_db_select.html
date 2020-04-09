@@ -8,7 +8,7 @@
       </ol>
     </nav>
     <div>
-        <form action="/update_db_all" method="post">
+        <form action="{{ url_for('update_db_all', site=site)}}" method="post">
             <button class="btn btn-primary btn-lg btn-block">Обновить все</button>
         </form>
         <hr>
