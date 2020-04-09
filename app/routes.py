@@ -7,6 +7,9 @@ from update_function.agromat_update import AgromatUpdate
 from app.db.get_db import db, prepare_csv
 from scraper.scraper_1 import Scraper
 from scraper.scraper_2 import get_agromat_brands
+from update_function.sandi_update import SandiUpdate
+from update_function.antey_update import AnteyUpdate
+from update_function.agromat_update import AgromatUpdate
 import os
 import pandas as pd
 
@@ -96,16 +99,15 @@ def update_db_brand_select():
 @app.route('/update_db_brand', methods=['GET', 'POST'])
 def update_db_brand():
     site = request.args.get('site')
-    cat = request.form.get('cat')
-    print(cat)
+    cat = request.form.getlist('cat')
     if site.split('/')[2] == 'b2b-sandi.com.ua':
-        Scraper.get_sandi_brands(Scraper.get_soup(site))
+        SandiUpdate.sandi_brands_update(db, site, cat)
         prepare_csv('sandi_db')
     elif site.split('/')[2] == 'b2b.antey.com.ua':
-        AnteyUpdate.antey_update_all(db, site)
+        AnteyUpdate.antey_brands_update(db, site, cat)
         prepare_csv('antey_db')
     elif site.split('/')[2] == 'partners.agromat.ua':
-        AgromatUpdate.agromat_update_all(db, site)
+        AgromatUpdate.agromat_brands_update(db, site, cat)
         prepare_csv('agromat_db')
     else:
         return 'Проверьте корректность ссылки!'
