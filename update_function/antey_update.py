@@ -95,4 +95,3 @@ class AnteyUpdate(Scraper):
                          if update == None:
                              antey_dataset['manufacturer_name'] = manufacturer_name
                              antey_collection.insert_one(antey_dataset)
-                             

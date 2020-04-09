@@ -11,10 +11,15 @@ db = cluster['b2b']
 
 # полностью обновляют
 # SandiUpdate.sandi_update_all(db, sandi_link)
-AnteyUpdate.antey_update_all(db, antey_link)
+# AnteyUpdate.antey_update_all(db, antey_link)
 # AgromatUpdate.agromat_update_all(db, agromat_link)
 
 # обновляют цену, наличие
 # SandiUpdate.sandi_update_prices(db, sandi_link)
 # AnteyUpdate.antey_update_prices(db, antey_link)
 # AgromatUpdate.agromat_update_prices(db, agromat_link)
+
+# обновляют по брендам
+# SandiUpdate.get_sandi_brands(db, sandi_link, sandi_brands_update_list)
+# AnteyUpdate.get_sandi_brands(db, antey_link, antey_brands_update_list)
+# AgromatUpdate.get_sandi_brands(db, agromat_link, agromat_brands_update_list)
