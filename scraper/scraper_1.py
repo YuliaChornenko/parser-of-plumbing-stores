@@ -126,3 +126,32 @@ class Scraper:
             antey_dataset_list.append(antey_dataset)
         return antey_dataset_list
 
+    def get_sandi_brands(get_soup):
+
+        products = get_soup.find_all('offer')
+        sandi_brands_list = list()
+        for prod in products:
+            if prod.find('param') != None:
+                prod_param = prod.find_all('param')
+                for param in prod_param:
+                    param_category = (str(param).split('\"')[1]).replace('.', '')
+                    if param_category == 'Бренд':
+                        param = param.text
+                        sandi_brands_list.append(param)
+
+        sandi_brands_list = list(set(sandi_brands_list))
+        sandi_brands_list.sort()
+        return sandi_brands_list
+
+    def get_antey_brands(get_soup):
+
+        products = get_soup.find_all('product')
+        antey_brands_list = list()
+        for prod in products:
+            manufacturer_name = prod.find('manufacturer_name').text
+            antey_brands_list.append(manufacturer_name)
+
+        antey_brands_list = list(set(antey_brands_list))
+        antey_brands_list.remove('')
+        antey_brands_list.sort()
+        return antey_brands_list
