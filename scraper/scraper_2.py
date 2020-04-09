@@ -57,3 +57,22 @@ def agromat_scraper(agromat_link):
             agromat_dataset_list.append(agromat_dataset)
 
         return agromat_dataset_list
+
+
+def get_agromat_brands(agromat_link):
+
+    with urlopen(agromat_link) as r:
+        xml = r.read().decode('utf-8')
+        soup = BeautifulSoup(xml, 'xml')
+        products = soup.find_all('product')
+        agromat_brands_list = list()
+
+        for prod in products:
+            Brand = prod.find('Brand').text
+            agromat_brands_list.append(Brand)
+
+        agromat_brands_list = list(set(agromat_brands_list))
+        agromat_brands_list.remove('')
+        agromat_brands_list.sort()
+
+        return agromat_brands_list

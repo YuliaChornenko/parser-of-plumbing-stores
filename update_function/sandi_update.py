@@ -26,5 +26,9 @@ class SandiUpdate(Scraper):
                                                                         'currencyId': currencyId}})
 
 
+     def sandi_brands_update(db, sandi_link, sandi_brands_update_list):
+         sandi_collection = db['sandi_db']
+         sandi_site = Scraper.get_soup(sandi_link)
+         products = sandi_site.find_all('offer')
 
 
