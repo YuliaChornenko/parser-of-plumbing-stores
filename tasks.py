@@ -4,8 +4,27 @@ from scraper.scraper_1 import Scraper
 from scraper.scraper_2 import agromat_scraper
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from pymongo import MongoClient
+import pandas as pd
 
 app = Celery("fr_scrapper_scheduller")
+
+@app.tasks
+def prepare_csv(table_name):
+    client = MongoClient('mongodb://romasoya1402:Roma1989Soya@cluster0-shard-00-00-zkewx.mongodb.net:27017,cluster0-shard-00-01-zkewx.mongodb.net:27017,cluster0-shard-00-02-zkewx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
+    db = client.b2b
+    sandi_table= db[table_name].find()
+    docs = pd.DataFrame(columns=[])
+    for num, doc in enumerate(sandi_table):
+        doc["_id"] = str(doc["_id"])
+        series_obj = pd.Series(doc)
+        docs = docs.append(series_obj, ignore_index=True )
+
+    string = 'app/db/data/' + str(table_name) + '.csv'
+    string1 = 'app/db/data/' + str(table_name) + '.xlsx'
+    docs = docs.to_csv(string, index = False)
+    docs = pd.read_csv(string)
+    docs.to_excel(string1, index=None, header=True)
 
 @app.task
 def sandi_update_all(db, site):

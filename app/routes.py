@@ -1,8 +1,5 @@
 from flask import render_template, Response, request, redirect, url_for, send_from_directory, send_file
 from app import app
-from update_function.sandi_update import SandiUpdate
-from update_function.antey_update import AnteyUpdate
-from update_function.agromat_update import AgromatUpdate
 from app.db.get_db import db, prepare_csv
 from scraper.scraper_1 import Scraper
 from scraper.scraper_2 import get_agromat_brands
