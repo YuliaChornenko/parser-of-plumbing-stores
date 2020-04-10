@@ -12,56 +12,33 @@ app = Celery("fr_scrapper")
 @app.task
 def agromat_scraper(agromat_link):
     with urlopen(agromat_link) as r:
-        xml = r.read().decode('utf-8')
-        soup = BeautifulSoup(xml, 'xml')
+        soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
         products = soup.find_all('product')
         agromat_dataset_list = list()
         for prod in products:
-            Articul = prod.find('Articul').text
-            Available = prod.find('Available').text
-            Brand = prod.find('Brand').text
-            Category = prod.find('Category').text
-            Code = prod.find('Code').text
-            Collections = prod.find('Collections').text
-            Country = prod.find('Country').text
-            Group = prod.find('Group').text
-            Height = prod.find('Height').text
-            Images = prod.find('Images').text
-            Length = prod.find('Length').text
-            KgInPackage = prod.find('Length').text
-            Measure = prod.find('Measure').text
-            MetersInPackage = prod.find('MetersInPackage').text
-            Name = prod.find('Name').text
-            PackagesInPallets = prod.find('PackagesInPallets').text
-            PiecesInPackage = prod.find('PiecesInPackage').text
-            RrcPrice = prod.find('RrcPrice').text
-            Sort = prod.find('Sort').text
-            Status = prod.find('Status').text
-            Width = prod.find('Width').text
             agromat_dataset = {
-                'Articul': Articul,
-                'Available': Available,
-                'Brand': Brand,
-                'Category': Category,
-                'Code': Code,
-                'Collections': Collections,
-                'Country': Country,
-                'Group': Group,
-                'Height': Height,
-                'Images': Images,
-                'Length': Length,
-                'KgInPackage': KgInPackage,
-                'Measure': Measure,
-                'MetersInPackage': MetersInPackage,
-                'Name': Name,
-                'PackagesInPallets': PackagesInPallets,
-                'PiecesInPackage': PiecesInPackage,
-                'RrcPrice': RrcPrice,
-                'Sort': Sort,
-                'Status': Status,
-                'Width': Width
+                'Articul': prod.find('Articul').text,
+                'Available': prod.find('Available').text,
+                'Brand': prod.find('Brand').text,
+                'Category': prod.find('Category').text,
+                'Code': prod.find('Code').text,
+                'Collections': prod.find('Collections').text,
+                'Country': prod.find('Country').text,
+                'Group': prod.find('Group').text,
+                'Height': prod.find('Height').text,
+                'Images': prod.find('Images').text,
+                'Length': prod.find('Length').text,
+                'KgInPackage': prod.find('Length').text,
+                'Measure': prod.find('Measure').text,
+                'MetersInPackage': prod.find('MetersInPackage').text,
+                'Name': prod.find('Name').text,
+                'PackagesInPallets': prod.find('PackagesInPallets').text,
+                'PiecesInPackage': prod.find('PiecesInPackage').text,
+                'RrcPrice': prod.find('RrcPrice').text,
+                'Sort': prod.find('Sort').text,
+                'Status': prod.find('Status').text,
+                'Width': prod.find('Width').text
             }
-
             agromat_dataset_list.append(agromat_dataset)
 
         return agromat_dataset_list
@@ -245,22 +222,7 @@ def sandi_update_all(db, site):
     sandi_dataset_list = get_sandi_produts(get_soup(site))
     sandi_collection.insert_many(sandi_dataset_list)
 
-@app.task
-def sandi_update_prices(db, sandi_link):
-    sandi_collection = db['sandi_db']
-    sandi_site = get_soup(sandi_link)
-    products = sandi_site.find_all('offer')
-    for prod in products:
-        main_list = (str(prod).split('>')[0]).split('\"')
-        id = main_list[3]
-        aviable = main_list[1]
-        instock = main_list[5]
-        price = prod.find('price').text
-        currencyId = prod.find('currencyId').text
-        sandi_collection.find_one_and_update({'id': id}, {'$set': {'aviable': aviable,
-                                                                   'instock': instock,
-                                                                   'price': price,
-                                                                   'currencyId': currencyId}})
+
 
 @app.task
 def sandi_brands_update(db, sandi_link, sandi_brands_update_list):
@@ -321,32 +283,6 @@ def antey_update_all(db, antey_link):
      antey_dataset_list = get_antey_products(get_soup(antey_link))
      antey_collection.insert_many(antey_dataset_list)
 
-@app.task
-def antey_update_prices(db, antey_link):
-     antey_collection = db['antey_db']
-     antey_site = get_soup(antey_link)
-     products = antey_site.find_all('product')
-     for prod in products:
-         product_sku = prod.find('product_sku').text
-         product_status = prod.find('product_status').text
-         product_price = prod.find('product_price').text
-         product_currency = prod.find('product_currency').text
-         product_price_online = prod.find('product_price_online').text
-         product_price_currency_online = prod.find('product_price_currency_online').text
-         sourcePrice = prod.find('sourcePrice').text
-         sourceCurrency = prod.find('sourceCurrency').text
-         product_availability_local = prod.find('product_availability_local').text
-         product_availability = prod.find('product_availability').text
-         antey_collection.find_one_and_update({'product_sku': product_sku},
-                                              {'$set': {'product_status': product_status,
-                                                        'product_price': product_price,
-                                                        'product_currency': product_currency,
-                                                        'product_price_online': product_price_online,
-                                                        'product_price_currency_online': product_price_currency_online,
-                                                        'sourcePrice': sourcePrice,
-                                                        'sourceCurrency': sourceCurrency,
-                                                        'product_availability_local': product_availability_local,
-                                                        'product_availability': product_availability}})
 
 
 @app.task
@@ -417,22 +353,6 @@ def agromat_update_all(db, agromat_link):
      agromat_dataset_list = agromat_scraper(agromat_link)
      agromat_collection.insert_many(agromat_dataset_list)
 
-@app.task
-def agromat_update_prices(db, agromat_link):
- agromat_collection = db['agromat_db']
- with urlopen(agromat_link) as r:
-     xml = r.read().decode('utf-8')
-     soup = BeautifulSoup(xml, 'xml')
-     products = soup.find_all('product')
-     for prod in products:
-         Code = prod.find('Code').text
-         Available = prod.find('Available').text
-         RrcPrice = prod.find('RrcPrice').text
-         Status = prod.find('Status').text
-         agromat_collection.find_one_and_update({'Code': Code},
-                                                {'$set': {'Available': Available,
-                                                          'RrcPrice': RrcPrice,
-                                                          'Status': Status}})
 
 @app.task
 def agromat_brands_update(db, agromat_link, antey_brands_update_list):
@@ -444,49 +364,29 @@ def agromat_brands_update(db, agromat_link, antey_brands_update_list):
      for prod in products:
          Brand = prod.find('Brand').text
          if Brand in antey_brands_update_list:
-             Articul = prod.find('Articul').text
-             Available = prod.find('Available').text
-             Category = prod.find('Category').text
-             Code = prod.find('Code').text
-             Collections = prod.find('Collections').text
-             Country = prod.find('Country').text
-             Group = prod.find('Group').text
-             Height = prod.find('Height').text
-             Images = prod.find('Images').text
-             Length = prod.find('Length').text
-             KgInPackage = prod.find('Length').text
-             Measure = prod.find('Measure').text
-             MetersInPackage = prod.find('MetersInPackage').text
-             Name = prod.find('Name').text
-             PackagesInPallets = prod.find('PackagesInPallets').text
-             PiecesInPackage = prod.find('PiecesInPackage').text
-             RrcPrice = prod.find('RrcPrice').text
-             Sort = prod.find('Sort').text
-             Status = prod.find('Status').text
-             Width = prod.find('Width').text
              agromat_dataset = {
-                 'Articul': Articul,
-                 'Available': Available,
-                 'Category': Category,
-                 'Code': Code,
-                 'Collections': Collections,
-                 'Country': Country,
-                 'Group': Group,
-                 'Height': Height,
-                 'Images': Images,
-                 'Length': Length,
-                 'KgInPackage': KgInPackage,
-                 'Measure': Measure,
-                 'MetersInPackage': MetersInPackage,
-                 'Name': Name,
-                 'PackagesInPallets': PackagesInPallets,
-                 'PiecesInPackage': PiecesInPackage,
-                 'RrcPrice': RrcPrice,
-                 'Sort': Sort,
-                 'Status': Status,
-                 'Width': Width
+                 'Articul': prod.find('Articul').text,
+                 'Available': prod.find('Available').text,
+                 'Category': prod.find('Category').text,
+                 'Code': prod.find('Code').text,
+                 'Collections': prod.find('Collections').text,
+                 'Country': prod.find('Country').text,
+                 'Group': prod.find('Group').text,
+                 'Height': prod.find('Height').text,
+                 'Images': prod.find('Images').text,
+                 'Length': prod.find('Length').text,
+                 'KgInPackage': prod.find('Length').text,
+                 'Measure': prod.find('Measure').text,
+                 'MetersInPackage': prod.find('MetersInPackage').text,
+                 'Name': prod.find('Name').text,
+                 'PackagesInPallets': prod.find('PackagesInPallets').text,
+                 'PiecesInPackage': prod.find('PiecesInPackage').text,
+                 'RrcPrice': prod.find('RrcPrice').text,
+                 'Sort': prod.find('Sort').text,
+                 'Status': prod.find('Status').text,
+                 'Width': prod.find('Width').text
              }
-             update = agromat_collection.find_one_and_update({'Code': Code},
+             update = agromat_collection.find_one_and_update({'Code': prod.find('Code').text},
                                                            {'$set': agromat_dataset})
              if update == None:
                  agromat_dataset['Brand'] = Brand
@@ -496,8 +396,7 @@ def agromat_brands_update(db, agromat_link, antey_brands_update_list):
 def get_agromat_brands(agromat_link):
 
     with urlopen(agromat_link) as r:
-        xml = r.read().decode('utf-8')
-        soup = BeautifulSoup(xml, 'xml')
+        soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
         products = soup.find_all('product')
         agromat_brands_list = list()
 
