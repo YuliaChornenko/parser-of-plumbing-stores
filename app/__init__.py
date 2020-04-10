@@ -30,7 +30,7 @@ app.config.update(
     timezone='Europe/Oslo',
     enable_utc=True,
 )
-celery = make_celery(app)
+
 
 
 from app import routes
