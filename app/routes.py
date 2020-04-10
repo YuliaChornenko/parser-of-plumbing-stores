@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, send_file
 from app import app
 from app.db.get_db import db, agromat_cat
 from tasks import sandi_update_all, sandi_brands_update, antey_update_all, antey_brands_update, agromat_update_all, agromat_brands_update, prepare_csv,  \
-    get_agromat_brands, get_sandi_brands, get_soup, get_antey_brands
+    get_sandi_brands, get_soup, get_antey_brands
 
 
 @app.route('/')
