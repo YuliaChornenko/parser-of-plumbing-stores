@@ -47,13 +47,13 @@ def update_db_all():
     site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
         sandi_update_all(db,site)
-        #prepare_csv('sandi_db')
+        prepare_csv('sandi_db')
     elif site.split('/')[2] == 'b2b.antey.com.ua':
         antey_update_all(db, site)
-        #prepare_csv('antey_db')
+        prepare_csv('antey_db')
     elif site.split('/')[2] == 'partners.agromat.ua':
         agromat_update_all(db, site)
-        #prepare_csv('agromat_db')
+        prepare_csv('agromat_db')
     else:
         return 'Проверьте корректность ссылки!'
     return 'База данных обновлена!'
