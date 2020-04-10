@@ -7,7 +7,7 @@ from pymongo import MongoClient
 import pandas as pd
 import requests as req
 
-app = Celery("fr_scrapper_scheduller")
+app = Celery("fr_scrapper")
 
 @app.task
 def agromat_scraper(agromat_link):
