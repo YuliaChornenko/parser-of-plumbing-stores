@@ -1,8 +1,11 @@
 from scraper.scraper_1 import Scraper
 # from app.db.get_db import
+from celery import Celery
+import celery
 
 class SandiUpdate(Scraper):
 
+     @celery.task
      def sandi_update_all(db, sandi_link):
          sandi_collection = db['sandi_db']
          sandi_collection.delete_many({})
