@@ -6,7 +6,7 @@ from update_function.agromat_update import AgromatUpdate
 from app.db.get_db import db, prepare_csv
 from scraper.scraper_1 import Scraper
 from scraper.scraper_2 import get_agromat_brands
-from tasks import *
+from tasks import sandi_update_all, sandi_update_prices, sandi_brands_update, antey_update_all, antey_update_prices, antey_brands_update, agromat_update_all, agromat_update_prices, agromat_brands_update
 
 @app.route('/')
 @app.route('/index')
