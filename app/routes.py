@@ -1,8 +1,8 @@
 from flask import render_template, Response, request, redirect, url_for, send_from_directory, send_file
 from app import app
 from app.db.get_db import db
-from scraper.scraper_1 import Scraper
-from tasks import sandi_update_all, sandi_update_prices, sandi_brands_update, antey_update_all, antey_update_prices, antey_brands_update, agromat_update_all, agromat_update_prices, agromat_brands_update, prepare_csv, connection, get_agromat_brands
+from tasks import sandi_update_all, sandi_update_prices, sandi_brands_update, antey_update_all, antey_update_prices, antey_brands_update, agromat_update_all, agromat_update_prices, agromat_brands_update, prepare_csv, connection, \
+    get_agromat_brands, get_sandi_brands, get_soup, get_antey_brands
 
 @app.route('/')
 @app.route('/index')
@@ -75,9 +75,9 @@ def update_db_all():
 def update_db_brand_select():
     site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
-        posts = Scraper.get_sandi_brands(Scraper.get_soup(site))
+        posts = get_sandi_brands(get_soup(site))
     elif site.split('/')[2] == 'b2b.antey.com.ua':
-        posts = Scraper.get_antey_brands(Scraper.get_soup(site))
+        posts = get_antey_brands(get_soup(site))
     elif site.split('/')[2] == 'partners.agromat.ua':
         posts = get_agromat_brands(site)
     else:
