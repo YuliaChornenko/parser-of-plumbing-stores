@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import pandas as pd
 
-app = Celery("fr_scrapper_scheduller")
+app = Celery("fr_scrapper")
 
 @app.task
 def connection(table_name):
