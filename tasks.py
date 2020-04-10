@@ -40,7 +40,7 @@ def agromat_scr(prod):
 def agromat_scraper(agromat_link):
     with urlopen(agromat_link) as r:
         soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
-        agromat_dataset_list = map(agromat_scr, soup.find_all('product')[:1000])
+        agromat_dataset_list = map(agromat_scr, soup.find_all('product'))
         return agromat_dataset_list
 
 @app.task
