@@ -59,18 +59,18 @@ def update_db_all():
         return render_template('try.html')
     return render_template('updated.html')
 
-@app.route('/update_db_price', methods=['GET', 'POST'])
-def update_db_price():
-    site = request.args.get('site').strip()
-    if site.split('/')[2] == 'b2b-sandi.com.ua':
-        sandi_update_prices(db, site)
-    elif site.split('/')[2] == 'b2b.antey.com.ua':
-        antey_update_prices(db, site)
-    elif site.split('/')[2] == 'partners.agromat.ua':
-        agromat_update_prices(db, site)
-    else:
-        return render_template('try.html')
-    return render_template('updated.html')
+# @app.route('/update_db_price', methods=['GET', 'POST'])
+# def update_db_price():
+#     site = request.args.get('site').strip()
+#     if site.split('/')[2] == 'b2b-sandi.com.ua':
+#         sandi_update_prices(db, site)
+#     elif site.split('/')[2] == 'b2b.antey.com.ua':
+#         antey_update_prices(db, site)
+#     elif site.split('/')[2] == 'partners.agromat.ua':
+#         agromat_update_prices(db, site)
+#     else:
+#         return render_template('try.html')
+#     return render_template('updated.html')
 
 @app.route('/update_db_brand_select', methods=['GET', 'POST'])
 def update_db_brand_select():

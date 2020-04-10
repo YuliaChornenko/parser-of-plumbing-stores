@@ -27,7 +27,7 @@ def prepare_csv(table_name, table):
     string = 'app/db/data/' + str(table_name) + '.csv'
     string1 = 'app/db/data/' + str(table_name) + '.xlsx'
     docs = docs.to_csv(string, index = False)
-    docs = pd.read_csv(string)
+    docs = pd.read_csv(string, low_memory=False)
     docs.to_excel(string1, index=None, header=True)
 
 @app.task
