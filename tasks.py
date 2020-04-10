@@ -6,8 +6,6 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import pandas as pd
-import time
-import _multiprocessing
 
 app = Celery("fr_scrapper_scheduller")
 
