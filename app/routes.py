@@ -1,7 +1,7 @@
-from flask import render_template, Response, request, redirect, url_for, send_from_directory, send_file
+from flask import render_template, request, redirect, url_for, send_file
 from app import app
 from app.db.get_db import db
-from tasks import sandi_update_all, sandi_update_prices, sandi_brands_update, antey_update_all, antey_update_prices, antey_brands_update, agromat_update_all, agromat_update_prices, agromat_brands_update, prepare_csv, connection, \
+from tasks import sandi_update_all, sandi_brands_update, antey_update_all, antey_brands_update, agromat_update_all, agromat_brands_update, prepare_csv,  \
     get_agromat_brands, get_sandi_brands, get_soup, get_antey_brands
 
 @app.route('/')
@@ -34,7 +34,6 @@ def agromat_db():
 @app.route('/update_db', methods=['GET', 'POST'])
 def update_db():
     site = request.form.get('site')
-    print(site)
     if site:
         return redirect(url_for('update_db_select', site=site))
     return render_template('update_db.html', site=site)
@@ -57,19 +56,6 @@ def update_db_all():
     else:
         return render_template('try.html')
     return render_template('updated.html')
-
-# @app.route('/update_db_price', methods=['GET', 'POST'])
-# def update_db_price():
-#     site = request.args.get('site').strip()
-#     if site.split('/')[2] == 'b2b-sandi.com.ua':
-#         sandi_update_prices(db, site)
-#     elif site.split('/')[2] == 'b2b.antey.com.ua':
-#         antey_update_prices(db, site)
-#     elif site.split('/')[2] == 'partners.agromat.ua':
-#         agromat_update_prices(db, site)
-#     else:
-#         return render_template('try.html')
-#     return render_template('updated.html')
 
 @app.route('/update_db_brand_select', methods=['GET', 'POST'])
 def update_db_brand_select():
