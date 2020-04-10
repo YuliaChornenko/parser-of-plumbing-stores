@@ -6,6 +6,7 @@ from update_function.agromat_update import AgromatUpdate
 from app.db.get_db import db, prepare_csv
 from scraper.scraper_1 import Scraper
 from scraper.scraper_2 import get_agromat_brands
+from tasks import add
 
 @app.route('/')
 @app.route('/index')
@@ -48,8 +49,9 @@ def update_db_select():
 def update_db_all():
     site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
-        SandiUpdate.sandi_update_all.delay(db, site)
-        prepare_csv('sandi_db')
+        # SandiUpdate.sandi_update_all.delay(db, site)
+        add(db,site)
+        # prepare_csv('sandi_db')
     elif site.split('/')[2] == 'b2b.antey.com.ua':
         AnteyUpdate.antey_update_all(db, site)
         prepare_csv('antey_db')

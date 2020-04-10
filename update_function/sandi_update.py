@@ -5,14 +5,12 @@ from tasks import add, app
 
 class SandiUpdate(Scraper):
 
-     def test(db, site):
-         sandi_collection = db['sandi_db']
+     @staticmethod
+     def test():
          task = add.delay(5,6)
          print(task.ready())
-         sandi_collection.find_one({'id':'SD00032544'})
 
 
-     @app.task
      def sandi_update_all(db, sandi_link):
          sandi_collection = db['sandi_db']
          sandi_collection.delete_many({})
