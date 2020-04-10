@@ -3,7 +3,7 @@ from app import app
 from app.db.get_db import db
 from scraper.scraper_1 import Scraper
 from scraper.scraper_2 import get_agromat_brands
-from tasks import sandi_update_all, sandi_update_prices, sandi_brands_update, antey_update_all, antey_update_prices, antey_brands_update, agromat_update_all, agromat_update_prices, agromat_brands_update, prepare_csv
+from tasks import sandi_update_all, sandi_update_prices, sandi_brands_update, antey_update_all, antey_update_prices, antey_brands_update, agromat_update_all, agromat_update_prices, agromat_brands_update, prepare_csv, connection
 
 @app.route('/')
 @app.route('/index')
@@ -16,17 +16,19 @@ def view_db_select():
 
 @app.route('/sandi_db', methods=['GET', 'POST'])
 def sandi_db():
-    prepare_csv('sandi_db')
+    prepare_csv('sandi_db', table=connection('sandi_db'))
     path = "db/data/sandi_db.xlsx"
     return send_file(path, as_attachment=True)
 
 @app.route('/antey_db', methods=['GET', 'POST'])
 def antey_db():
+    prepare_csv('antey_db', table=connection('antey_db'))
     path = "db/data/antey_db.xlsx"
     return send_file(path, as_attachment=True)
 
 @app.route('/agromat_db', methods=['GET', 'POST'])
 def agromat_db():
+    prepare_csv('agromat_db', table=connection('agromat_db'))
     path = "db/data/agromat_db.xlsx"
     return send_file(path, as_attachment=True)
 
@@ -41,7 +43,8 @@ def update_db():
 @app.route('/update_db_select', methods=['GET', 'POST'])
 def update_db_select():
     site = request.args.get('site').strip()
-    return render_template('update_db_select.html', site=site)
+    message = 'Обновление может занять некоторое время...'
+    return render_template('update_db_select.html', site=site, message=message)
 
 @app.route('/update_db_all', methods=['GET', 'POST'])
 def update_db_all():
@@ -50,29 +53,24 @@ def update_db_all():
         sandi_update_all(db,site)
     elif site.split('/')[2] == 'b2b.antey.com.ua':
         antey_update_all(db, site)
-        prepare_csv('antey_db')
     elif site.split('/')[2] == 'partners.agromat.ua':
         agromat_update_all(db, site)
-        prepare_csv('agromat_db')
     else:
-        return 'Проверьте корректность ссылки!'
-    return 'База данных обновлена!'
+        return render_template('try.html')
+    return render_template('updated.html')
 
 @app.route('/update_db_price', methods=['GET', 'POST'])
 def update_db_price():
     site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
         sandi_update_prices(db, site)
-        prepare_csv('sandi_db')
     elif site.split('/')[2] == 'b2b.antey.com.ua':
         antey_update_prices(db, site)
-        prepare_csv('antey_db')
     elif site.split('/')[2] == 'partners.agromat.ua':
         agromat_update_prices(db, site)
-        prepare_csv('agromat_db')
     else:
-        return 'Проверьте корректность ссылки!'
-    return 'База данных обновлена!'
+        return render_template('try.html')
+    return render_template('updated.html')
 
 @app.route('/update_db_brand_select', methods=['GET', 'POST'])
 def update_db_brand_select():
@@ -84,7 +82,7 @@ def update_db_brand_select():
     elif site.split('/')[2] == 'partners.agromat.ua':
         posts = get_agromat_brands(site)
     else:
-        return 'Проверьте корректность ссылки!'
+        return render_template('try.html')
     return render_template('update_db_brand_select.html', posts=posts, site=site)
 
 @app.route('/update_db_brand', methods=['GET', 'POST'])
@@ -93,14 +91,11 @@ def update_db_brand():
     cat = request.form.getlist('cat')
     if site.split('/')[2] == 'b2b-sandi.com.ua':
         sandi_brands_update(db, site, cat)
-        prepare_csv('sandi_db')
     elif site.split('/')[2] == 'b2b.antey.com.ua':
         antey_brands_update(db, site, cat)
-        prepare_csv('antey_db')
     elif site.split('/')[2] == 'partners.agromat.ua':
         agromat_brands_update(db, site, cat)
-        prepare_csv('agromat_db')
     else:
-        return 'Проверьте корректность ссылки!'
-    return 'База данных обновлена!'
+        return render_template('try.html')
+    return render_template('updated.html')
 
