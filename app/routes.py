@@ -48,7 +48,8 @@ def update_db_select():
 def update_db_all():
     site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
-        SandiUpdate.sandi_update_all(db, site)
+        result = SandiUpdate.sandi_update_all.delay(db, site)
+        result.wait()
         prepare_csv('sandi_db')
     elif site.split('/')[2] == 'b2b.antey.com.ua':
         AnteyUpdate.antey_update_all(db, site)
