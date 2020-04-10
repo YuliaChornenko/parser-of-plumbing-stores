@@ -44,8 +44,7 @@ def agromat_scraper(agromat_link):
 
 @app.task
 def get_soup(link):
-    resp = req.get(link)
-    soup = BeautifulSoup(resp.text, 'xml')
+    soup = BeautifulSoup(req.get(link), 'xml')
     return soup
 
 @app.task
@@ -310,19 +309,16 @@ def antey_brands_update(db, antey_link, antey_brands_update_list):
 def agromat_update_all(db, agromat_link):
      agromat_collection = db['agromat_db']
      agromat_collection.delete_many({})
-     agromat_dataset_list = agromat_scraper(agromat_link)
-     agromat_collection.insert_many(agromat_dataset_list)
+     agromat_collection.insert_many(agromat_scraper(agromat_link))
 
 
 @app.task
 def agromat_brands_update(db, agromat_link, antey_brands_update_list):
  agromat_collection = db['agromat_db']
  with urlopen(agromat_link) as r:
-     xml = r.read().decode('utf-8')
-     soup = BeautifulSoup(xml, 'xml')
+     soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
      for prod in soup.find_all('product'):
-         Brand = prod.find('Brand').text
-         if Brand in antey_brands_update_list:
+         if prod.find('Brand').text in antey_brands_update_list:
              agromat_dataset = {
                  'Articul': prod.find('Articul').text,
                  'Available': prod.find('Available').text,
@@ -348,7 +344,7 @@ def agromat_brands_update(db, agromat_link, antey_brands_update_list):
              update = agromat_collection.find_one_and_update({'Code': prod.find('Code').text},
                                                            {'$set': agromat_dataset})
              if update == None:
-                 agromat_dataset['Brand'] = Brand
+                 agromat_dataset['Brand'] = prod.find('Brand').text
                  agromat_collection.insert_one(agromat_dataset)
 
 
