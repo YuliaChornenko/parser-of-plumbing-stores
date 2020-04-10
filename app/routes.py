@@ -15,20 +15,20 @@ def view_db_select():
 
 @app.route('/sandi_db', methods=['GET', 'POST'])
 def sandi_db():
-    prepare_csv('sandi_db', table=connection('sandi_db'))
-    path = "db/data/sandi_db.xlsx"
+    prepare_csv('sandi_db')
+    path = "db/data/sandi_db.csv"
     return send_file(path, as_attachment=True)
 
 @app.route('/antey_db', methods=['GET', 'POST'])
 def antey_db():
-    prepare_csv('antey_db', table=connection('antey_db'))
-    path = "db/data/antey_db.xlsx"
+    prepare_csv('antey_db')
+    path = "db/data/antey_db.csv"
     return send_file(path, as_attachment=True)
 
 @app.route('/agromat_db', methods=['GET', 'POST'])
 def agromat_db():
-    prepare_csv('agromat_db', table=connection('agromat_db'))
-    path = "db/data/agromat_db.xlsx"
+    prepare_csv('agromat_db')
+    path = "db/data/agromat_db.csv"
     return send_file(path, as_attachment=True)
 
 @app.route('/update_db', methods=['GET', 'POST'])
