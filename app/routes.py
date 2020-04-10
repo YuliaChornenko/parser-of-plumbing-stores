@@ -2,8 +2,7 @@ from flask import render_template, Response, request, redirect, url_for, send_fr
 from app import app
 from app.db.get_db import db
 from scraper.scraper_1 import Scraper
-from scraper.scraper_2 import get_agromat_brands
-from tasks import sandi_update_all, sandi_update_prices, sandi_brands_update, antey_update_all, antey_update_prices, antey_brands_update, agromat_update_all, agromat_update_prices, agromat_brands_update, prepare_csv, connection
+from tasks import sandi_update_all, sandi_update_prices, sandi_brands_update, antey_update_all, antey_update_prices, antey_brands_update, agromat_update_all, agromat_update_prices, agromat_brands_update, prepare_csv, connection, get_agromat_brands
 
 @app.route('/')
 @app.route('/index')
