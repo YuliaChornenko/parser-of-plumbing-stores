@@ -1,8 +1,9 @@
 from flask import render_template, request, redirect, url_for, send_file
 from app import app
-from app.db.get_db import db
+from app.db.get_db import db, agromat_cat
 from tasks import sandi_update_all, sandi_brands_update, antey_update_all, antey_brands_update, agromat_update_all, agromat_brands_update, prepare_csv,  \
     get_agromat_brands, get_sandi_brands, get_soup, get_antey_brands
+
 
 @app.route('/')
 @app.route('/index')
@@ -65,7 +66,7 @@ def update_db_brand_select():
     elif site.split('/')[2] == 'b2b.antey.com.ua':
         posts = get_antey_brands(get_soup(site))
     elif site.split('/')[2] == 'partners.agromat.ua':
-        posts = get_agromat_brands(site)
+        posts = agromat_cat
     else:
         return render_template('try.html')
     return render_template('update_db_brand_select.html', posts=posts, site=site)

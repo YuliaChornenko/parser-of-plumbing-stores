@@ -13,9 +13,8 @@ app = Celery("fr_scrapper")
 def agromat_scraper(agromat_link):
     with urlopen(agromat_link) as r:
         soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
-        products = soup.find_all('product')
         agromat_dataset_list = list()
-        for prod in products:
+        for prod in soup.find_all('product'):
             agromat_dataset = {
                 'Articul': prod.find('Articul').text,
                 'Available': prod.find('Available').text,
@@ -76,38 +75,25 @@ def get_sandi_produts(get_soup):
     sandi_dataset_list = list()
     for prod in products:
         main_list = (str(prod).split('>')[0]).split('\"')
-        id = main_list[3]
-        aviable = main_list[1]
-        instock = main_list[5]
-        name = prod.find('name').text
-        delivery = prod.find('delivery').text
-        vendor = prod.find('vendor').text
-        vendorCode = prod.find('vendorCode').text
-        model = prod.find('model').text
-        description = prod.find('description').text
-        price = prod.find('price').text
-        currencyId = prod.find('currencyId').text
-        categoryId = prod.find('categoryId').text
         sandi_dataset = {
-            'id': id,
-            'name': name,
-            'aviable': aviable,
-            'instock': instock,
-            'price': price,
-            'currencyId': currencyId,
-            'delivery': delivery,
-            'vendor': vendor,
-            'vendorCode': vendorCode,
-            'model': model,
-            'description': description,
-            'categoryId': categoryId,
+            'id': main_list[3],
+            'name': prod.find('name').text,
+            'aviable': main_list[1],
+            'instock': main_list[5],
+            'price': prod.find('price').text,
+            'currencyId': prod.find('currencyId').text,
+            'delivery': prod.find('delivery').text,
+            'vendor': prod.find('vendor').text,
+            'vendorCode': prod.find('vendorCode').text,
+            'model': prod.find('model').text,
+            'description': prod.find('description').text,
+            'categoryId': prod.find('categoryId').text,
         }
         if prod.find('param') != None:
             prod_param = prod.find_all('param')
             for param in prod_param:
                 param_category = (str(param).split('\"')[1]).replace('.', '')
-                param = param.text
-                sandi_dataset[param_category] = param
+                sandi_dataset[param_category] = param.text
 
         sandi_dataset_list.append(sandi_dataset)
     return sandi_dataset_list
@@ -117,37 +103,22 @@ def get_antey_products(get_soup):
     products = get_soup.find_all('product')
     antey_dataset_list = list()
     for prod in products:
-        product_sku = prod.find('product_sku').text
-        product_categoryId = prod.find('product_categoryId').text
-        product_name = prod.find('product_name').text
-        product_model = prod.find('product_model').text
-        manufacturer_name = prod.find('manufacturer_name').text
-        product_seria = prod.find('product_seria').text
-        product_status = prod.find('product_status').text
-        product_price = prod.find('product_price').text
-        product_currency = prod.find('product_currency').text
-        product_price_online = prod.find('product_price_online').text
-        product_price_currency_online = prod.find('product_price_currency_online').text
-        sourcePrice = prod.find('sourcePrice').text
-        sourceCurrency = prod.find('sourceCurrency').text
-        product_availability_local = prod.find('product_availability_local').text
-        product_availability = prod.find('product_availability').text
         antey_dataset = {
-            'product_sku': product_sku,
-            'product_categoryId': product_categoryId,
-            'product_name': product_name,
-            'product_model': product_model,
-            'manufacturer_name': manufacturer_name,
-            'product_seria': product_seria,
-            'product_status': product_status,
-            'product_price': product_price,
-            'product_currency': product_currency,
-            'product_price_online': product_price_online,
-            'product_price_currency_online': product_price_currency_online,
-            'sourcePrice': sourcePrice,
-            'sourceCurrency': sourceCurrency,
-            'product_availability_local': product_availability_local,
-            'product_availability': product_availability,
+            'product_sku': prod.find('product_sku').text,
+            'product_categoryId': prod.find('product_categoryId').text,
+            'product_name': prod.find('product_name').text,
+            'product_model': prod.find('product_model').text,
+            'manufacturer_name': prod.find('manufacturer_name').text,
+            'product_seria': prod.find('product_seria').text,
+            'product_status': prod.find('product_status').text,
+            'product_price': prod.find('product_price').text,
+            'product_currency': prod.find('product_currency').text,
+            'product_price_online': prod.find('product_price_online').text,
+            'product_price_currency_online': prod.find('product_price_currency_online').text,
+            'sourcePrice': prod.find('sourcePrice').text,
+            'sourceCurrency': prod.find('sourceCurrency').text,
+            'product_availability_local': prod.find('product_availability_local').text,
+            'product_availability': prod.find('product_availability').text,
         }
 
         if prod.find('ext_info').text == 'true':
@@ -238,31 +209,20 @@ def sandi_brands_update(db, sandi_link, sandi_brands_update_list):
                 if param_category == 'Бренд':
                     if param in sandi_brands_update_list:
                         main_list = (str(prod).split('>')[0]).split('\"')
-                        id = main_list[3]
                         aviable = main_list[1]
-                        instock = main_list[5]
-                        name = prod.find('name').text
-                        delivery = prod.find('delivery').text
-                        vendor = prod.find('vendor').text
-                        vendorCode = prod.find('vendorCode').text
-                        model = prod.find('model').text
-                        description = prod.find('description').text
-                        price = prod.find('price').text
-                        currencyId = prod.find('currencyId').text
-                        categoryId = prod.find('categoryId').text
                         sandi_dataset = {
-                            'id': id,
-                            'name': name,
+                            'id': main_list[3],
+                            'name': prod.find('name').text,
                             'aviable': aviable,
-                            'instock': instock,
-                            'price': price,
-                            'currencyId': currencyId,
-                            'delivery': delivery,
-                            'vendor': vendor,
-                            'vendorCode': vendorCode,
-                            'model': model,
-                            'description': description,
-                            'categoryId': categoryId,
+                            'instock': main_list[5],
+                            'price': prod.find('price').text,
+                            'currencyId': prod.find('currencyId').text,
+                            'delivery': prod.find('delivery').text,
+                            'vendor': prod.find('vendor').text,
+                            'vendorCode': prod.find('vendorCode').text,
+                            'model': prod.find('model').text,
+                            'description': prod.find('description').text,
+                            'categoryId': prod.find('categoryId').text,
                         }
                         if prod.find('param') != None:
                             prod_param = prod.find_all('param')
@@ -360,8 +320,7 @@ def agromat_brands_update(db, agromat_link, antey_brands_update_list):
  with urlopen(agromat_link) as r:
      xml = r.read().decode('utf-8')
      soup = BeautifulSoup(xml, 'xml')
-     products = soup.find_all('product')
-     for prod in products:
+     for prod in soup.find_all('product'):
          Brand = prod.find('Brand').text
          if Brand in antey_brands_update_list:
              agromat_dataset = {
@@ -392,23 +351,6 @@ def agromat_brands_update(db, agromat_link, antey_brands_update_list):
                  agromat_dataset['Brand'] = Brand
                  agromat_collection.insert_one(agromat_dataset)
 
-@app.task
-def get_agromat_brands(agromat_link):
-
-    with urlopen(agromat_link) as r:
-        soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
-        products = soup.find_all('product')
-        agromat_brands_list = list()
-
-        for prod in products:
-            Brand = prod.find('Brand').text
-            agromat_brands_list.append(Brand)
-
-        agromat_brands_list = list(set(agromat_brands_list))
-        agromat_brands_list.remove('')
-        agromat_brands_list.sort()
-
-        return agromat_brands_list
 
 
 app.conf.update(BROKER_URL=os.environ['REDIS_URL'],CELERY_RESULT_BACKEND = os.environ['REDIS_URL'])
