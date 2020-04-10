@@ -1,15 +1,8 @@
 from scraper.scraper_1 import Scraper
 # from app.db.get_db import
 from celery import Celery
-from tasks import add, app
 
 class SandiUpdate(Scraper):
-
-     @staticmethod
-     def test():
-         task = add.delay(5,6)
-         print(task.ready())
-
 
      def sandi_update_all(db, sandi_link):
          sandi_collection = db['sandi_db']

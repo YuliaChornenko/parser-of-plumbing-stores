@@ -6,7 +6,7 @@ from update_function.agromat_update import AgromatUpdate
 from app.db.get_db import db, prepare_csv
 from scraper.scraper_1 import Scraper
 from scraper.scraper_2 import get_agromat_brands
-from tasks import add
+from tasks import *
 
 @app.route('/')
 @app.route('/index')
@@ -49,14 +49,13 @@ def update_db_select():
 def update_db_all():
     site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
-        # SandiUpdate.sandi_update_all.delay(db, site)
-        add(db,site)
-        # prepare_csv('sandi_db')
+        sandi_update_all(db,site)
+        prepare_csv('sandi_db')
     elif site.split('/')[2] == 'b2b.antey.com.ua':
-        AnteyUpdate.antey_update_all(db, site)
+        antey_update_all(db, site)
         prepare_csv('antey_db')
     elif site.split('/')[2] == 'partners.agromat.ua':
-        AgromatUpdate.agromat_update_all(db, site)
+        agromat_update_all(db, site)
         prepare_csv('agromat_db')
     else:
         return 'Проверьте корректность ссылки!'
@@ -66,13 +65,13 @@ def update_db_all():
 def update_db_price():
     site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
-        SandiUpdate.sandi_update_prices(db, site)
+        sandi_update_prices(db, site)
         prepare_csv('sandi_db')
     elif site.split('/')[2] == 'b2b.antey.com.ua':
-        AnteyUpdate.antey_update_prices(db, site)
+        antey_update_prices(db, site)
         prepare_csv('antey_db')
     elif site.split('/')[2] == 'partners.agromat.ua':
-        AgromatUpdate.agromat_update_prices(db, site)
+        agromat_update_prices(db, site)
         prepare_csv('agromat_db')
     else:
         return 'Проверьте корректность ссылки!'
@@ -96,13 +95,13 @@ def update_db_brand():
     site = request.args.get('site')
     cat = request.form.getlist('cat')
     if site.split('/')[2] == 'b2b-sandi.com.ua':
-        SandiUpdate.sandi_brands_update(db, site, cat)
+        sandi_brands_update(db, site, cat)
         prepare_csv('sandi_db')
     elif site.split('/')[2] == 'b2b.antey.com.ua':
-        AnteyUpdate.antey_brands_update(db, site, cat)
+        antey_brands_update(db, site, cat)
         prepare_csv('antey_db')
     elif site.split('/')[2] == 'partners.agromat.ua':
-        AgromatUpdate.agromat_brands_update(db, site, cat)
+        agromat_brands_update(db, site, cat)
         prepare_csv('agromat_db')
     else:
         return 'Проверьте корректность ссылки!'
