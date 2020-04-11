@@ -3,7 +3,7 @@ from app import app
 from app.db.get_db import db, agromat_cat
 from tasks import sandi_update_all, sandi_brands_update, antey_update_all, antey_brands_update, agromat_update_all, agromat_brands_update, prepare_csv,  \
     get_sandi_brands, get_soup, get_antey_brands
-
+import time
 
 @app.route('/')
 @app.route('/index')
@@ -49,14 +49,15 @@ def update_db_select():
 def update_db_all():
     site = request.args.get('site').strip()
     if site.split('/')[2] == 'b2b-sandi.com.ua':
-        sandi_update_all(db,site)
+        sandi_update_all.delay(site)
     elif site.split('/')[2] == 'b2b.antey.com.ua':
-        antey_update_all(db, site)
+        antey_update_all.delay(site)
     elif site.split('/')[2] == 'partners.agromat.ua':
-        agromat_update_all(db, site)
+        agromat_update_all.delay(site)
+        return render_template('wait_agromat.html')
     else:
         return render_template('try.html')
-    return render_template('updated.html')
+    return render_template('wait.html')
 
 @app.route('/update_db_brand_select', methods=['GET', 'POST'])
 def update_db_brand_select():
@@ -71,17 +72,22 @@ def update_db_brand_select():
         return render_template('try.html')
     return render_template('update_db_brand_select.html', posts=posts, site=site)
 
+
 @app.route('/update_db_brand', methods=['GET', 'POST'])
 def update_db_brand():
     site = request.args.get('site')
     cat = request.form.getlist('cat')
     if site.split('/')[2] == 'b2b-sandi.com.ua':
-        sandi_brands_update(db, site, cat)
+        sandi_brands_update.delay(site, cat)
     elif site.split('/')[2] == 'b2b.antey.com.ua':
-        antey_brands_update(db, site, cat)
+        antey_brands_update.delay(site, cat)
     elif site.split('/')[2] == 'partners.agromat.ua':
-        agromat_brands_update(db, site, cat)
+        agromat_brands_update.delay(site, cat)
+        return render_template('wait_agromat.html')
     else:
         return render_template('try.html')
-    return render_template('updated.html')
+    return render_template('wait.html')
 
+@app.route('/updated', methods=['GET', 'POST'])
+def updated():
+    return render_template('updated.html')

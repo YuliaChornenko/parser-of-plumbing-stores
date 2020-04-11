@@ -24,9 +24,9 @@ app.config.update(
     celery_result_backend=os.environ.get("REDIS_URL")
 )
 app.config.update(
-    task_serializer='json',
-    accept_content=['json'],  # Ignore other content
-    result_serializer='json',
+    task_serializer='pickle',
+    accept_content=['pickle', 'json'],  # Ignore other content
+    result_serializer='pickle',
     timezone='Europe/Oslo',
     enable_utc=True,
 )

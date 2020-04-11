@@ -154,7 +154,10 @@ def prepare_csv(table_name):
     docs.to_csv(string, index=False)
 
 @app.task
-def sandi_update_all(db, site):
+def sandi_update_all(site):
+    client = MongoClient(
+        'mongodb://romasoya1402:Roma1989Soya@cluster0-shard-00-00-zkewx.mongodb.net:27017,cluster0-shard-00-01-zkewx.mongodb.net:27017,cluster0-shard-00-02-zkewx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
+    db = client.b2b
     sandi_collection = db['sandi_db']
     sandi_collection.delete_many({})
     sandi_dataset_list = get_sandi_produts(get_soup(site))
@@ -163,7 +166,10 @@ def sandi_update_all(db, site):
 
 
 @app.task
-def sandi_brands_update(db, sandi_link, sandi_brands_update_list):
+def sandi_brands_update(sandi_link, sandi_brands_update_list):
+    client = MongoClient(
+        'mongodb://romasoya1402:Roma1989Soya@cluster0-shard-00-00-zkewx.mongodb.net:27017,cluster0-shard-00-01-zkewx.mongodb.net:27017,cluster0-shard-00-02-zkewx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
+    db = client.b2b
     sandi_collection = db['sandi_db']
     sandi_site = get_soup(sandi_link)
     products = sandi_site.find_all('offer')
@@ -204,7 +210,10 @@ def sandi_brands_update(db, sandi_link, sandi_brands_update_list):
                             sandi_collection.insert_one(sandi_dataset)
 
 @app.task
-def antey_update_all(db, antey_link):
+def antey_update_all(antey_link):
+     client = MongoClient(
+        'mongodb://romasoya1402:Roma1989Soya@cluster0-shard-00-00-zkewx.mongodb.net:27017,cluster0-shard-00-01-zkewx.mongodb.net:27017,cluster0-shard-00-02-zkewx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
+     db = client.b2b
      antey_collection = db['antey_db']
      antey_collection.delete_many({})
      antey_dataset_list = get_antey_products(get_soup(antey_link))
@@ -213,7 +222,10 @@ def antey_update_all(db, antey_link):
 
 
 @app.task
-def antey_brands_update(db, antey_link, antey_brands_update_list):
+def antey_brands_update(antey_link, antey_brands_update_list):
+ client = MongoClient(
+        'mongodb://romasoya1402:Roma1989Soya@cluster0-shard-00-00-zkewx.mongodb.net:27017,cluster0-shard-00-01-zkewx.mongodb.net:27017,cluster0-shard-00-02-zkewx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
+ db = client.b2b
  antey_collection = db['antey_db']
  antey_site = get_soup(antey_link)
  products = antey_site.find_all('product')
@@ -274,16 +286,15 @@ def antey_brands_update(db, antey_link, antey_brands_update_list):
                      antey_collection.insert_one(antey_dataset)
 
 @app.task
-def agromat_update_all(db, agromat_link):
+def agromat_update_all(agromat_link):
+     client = MongoClient(
+        'mongodb://romasoya1402:Roma1989Soya@cluster0-shard-00-00-zkewx.mongodb.net:27017,cluster0-shard-00-01-zkewx.mongodb.net:27017,cluster0-shard-00-02-zkewx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
+     db = client.b2b
      agromat_collection = db['agromat_db']
      agromat_collection.delete_many({})
      with urlopen(agromat_link) as r:
-         print('SOUP')
          soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
-         print('TEST')
-         i = 0
          for prod in soup.find_all('product'):
-             print(i)
              agromat_dataset = {
                  'Articul': prod.find('Articul').text,
                  'Available': prod.find('Available').text,
@@ -307,12 +318,15 @@ def agromat_update_all(db, agromat_link):
                  'Status': prod.find('Status').text,
                  'Width': prod.find('Width').text
              }
-             i+=1
              agromat_collection.insert_one(agromat_dataset)
+     return {"status": True}
 
 
 @app.task
-def agromat_brands_update(db, agromat_link, antey_brands_update_list):
+def agromat_brands_update(agromat_link, antey_brands_update_list):
+ client = MongoClient(
+    'mongodb://romasoya1402:Roma1989Soya@cluster0-shard-00-00-zkewx.mongodb.net:27017,cluster0-shard-00-01-zkewx.mongodb.net:27017,cluster0-shard-00-02-zkewx.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
+ db = client.b2b
  agromat_collection = db['agromat_db']
  with urlopen(agromat_link) as r:
      soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
@@ -342,10 +356,18 @@ def agromat_brands_update(db, agromat_link, antey_brands_update_list):
              }
              update = agromat_collection.find_one_and_update({'Code': prod.find('Code').text},
                                                            {'$set': agromat_dataset})
+
              if update == None:
                  agromat_dataset['Brand'] = prod.find('Brand').text
                  agromat_collection.insert_one(agromat_dataset)
 
 
 
-app.conf.update(BROKER_URL=os.environ['REDIS_URL'],CELERY_RESULT_BACKEND = os.environ['REDIS_URL'])
+app.conf.update(broker_url=os.environ['REDIS_URL'],result_backend = os.environ['REDIS_URL'])
+app.conf.update(
+    task_serializer='pickle',
+    accept_content=['pickle', 'json'],
+    result_serializer='pickle',
+    timezone='Europe/Oslo',
+    enable_utc=True,
+)

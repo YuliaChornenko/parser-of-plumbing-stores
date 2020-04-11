@@ -8,9 +8,6 @@
         <li class="breadcrumb-item active" aria-current="page">Выбрать действие</li>
       </ol>
     </nav>
-    <div class="alert alert-danger" role="alert">
-      {{ message }}
-    </div>
     <div>
         <form action="{{ url_for('update_db_all', site=site)}}" method="post">
             <button class="btn btn-primary btn-lg btn-block">Обновить все</button>
