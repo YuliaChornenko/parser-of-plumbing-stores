@@ -45,7 +45,7 @@ def agromat_scraper(agromat_link):
 
 @app.task
 def get_soup(link):
-    soup = BeautifulSoup(req.get(link), 'xml')
+    soup = BeautifulSoup((req.get(link)).text, 'xml')
     return soup
 
 @app.task
