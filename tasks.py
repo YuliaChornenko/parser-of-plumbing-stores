@@ -294,7 +294,9 @@ def agromat_update_all(agromat_link):
      agromat_collection.delete_many({})
      with urlopen(agromat_link) as r:
          soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
+         i=1
          for prod in soup.find_all('product'):
+             print(i)
              agromat_dataset = {
                  'Articul': prod.find('Articul').text,
                  'Available': prod.find('Available').text,
@@ -319,6 +321,7 @@ def agromat_update_all(agromat_link):
                  'Width': prod.find('Width').text
              }
              agromat_collection.insert_one(agromat_dataset)
+             i+=1
      return {"status": True}
 
 
