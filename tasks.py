@@ -10,6 +10,7 @@ import requests as req
 app = Celery("fr_scrapper")
 
 
+
 @app.task
 def get_soup(link):
     soup = BeautifulSoup((req.get(link)).text, 'xml')
