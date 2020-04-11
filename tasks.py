@@ -9,39 +9,6 @@ import requests as req
 
 app = Celery("fr_scrapper")
 
-@app.task
-def agromat_scr(prod):
-    agromat_dataset = {
-        'Articul': prod.find('Articul').text,
-        'Available': prod.find('Available').text,
-        'Brand': prod.find('Brand').text,
-        'Category': prod.find('Category').text,
-        'Code': prod.find('Code').text,
-        'Collections': prod.find('Collections').text,
-        'Country': prod.find('Country').text,
-        'Group': prod.find('Group').text,
-        'Height': prod.find('Height').text,
-        'Images': prod.find('Images').text,
-        'Length': prod.find('Length').text,
-        'KgInPackage': prod.find('Length').text,
-        'Measure': prod.find('Measure').text,
-        'MetersInPackage': prod.find('MetersInPackage').text,
-        'Name': prod.find('Name').text,
-        'PackagesInPallets': prod.find('PackagesInPallets').text,
-        'PiecesInPackage': prod.find('PiecesInPackage').text,
-        'RrcPrice': prod.find('RrcPrice').text,
-        'Sort': prod.find('Sort').text,
-        'Status': prod.find('Status').text,
-        'Width': prod.find('Width').text
-    }
-    return agromat_dataset
-
-@app.task
-def agromat_scraper(agromat_link):
-    with urlopen(agromat_link) as r:
-        soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
-        agromat_dataset_list = map(agromat_scr, soup.find_all('product'))[:100]
-        return agromat_dataset_list
 
 @app.task
 def get_soup(link):
@@ -310,7 +277,38 @@ def antey_brands_update(db, antey_link, antey_brands_update_list):
 def agromat_update_all(db, agromat_link):
      agromat_collection = db['agromat_db']
      agromat_collection.delete_many({})
-     agromat_collection.insert_many(agromat_scraper(agromat_link))
+     with urlopen(agromat_link) as r:
+         print('SOUP')
+         soup = BeautifulSoup(r.read().decode('utf-8'), 'xml')
+         print('TEST')
+         i = 0
+         for prod in soup.find_all('product'):
+             print(i)
+             agromat_dataset = {
+                 'Articul': prod.find('Articul').text,
+                 'Available': prod.find('Available').text,
+                 'Brand': prod.find('Brand').text,
+                 'Category': prod.find('Category').text,
+                 'Code': prod.find('Code').text,
+                 'Collections': prod.find('Collections').text,
+                 'Country': prod.find('Country').text,
+                 'Group': prod.find('Group').text,
+                 'Height': prod.find('Height').text,
+                 'Images': prod.find('Images').text,
+                 'Length': prod.find('Length').text,
+                 'KgInPackage': prod.find('Length').text,
+                 'Measure': prod.find('Measure').text,
+                 'MetersInPackage': prod.find('MetersInPackage').text,
+                 'Name': prod.find('Name').text,
+                 'PackagesInPallets': prod.find('PackagesInPallets').text,
+                 'PiecesInPackage': prod.find('PiecesInPackage').text,
+                 'RrcPrice': prod.find('RrcPrice').text,
+                 'Sort': prod.find('Sort').text,
+                 'Status': prod.find('Status').text,
+                 'Width': prod.find('Width').text
+             }
+             i+=1
+             agromat_collection.insert_one(agromat_dataset)
 
 
 @app.task
